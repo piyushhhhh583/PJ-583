@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: madam-exe
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /
+    disk:
+      name: madam-private-data
+      mountPath: /var/data/madam
+      sizeGB: 1
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: MADAM_DATA_DIR
+        value: /var/data/madam
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
